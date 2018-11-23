@@ -5,7 +5,7 @@ const client = new Discord.Client();
 client.on('ready', () => {
   console.log(`Welcome Bro ${client.user.tag}!`);
 });
-const prefix = '_'
+const prefix = '$'
 
 client.on('message', message => {
   if (!message.content.startsWith(prefix)) return;
@@ -81,24 +81,24 @@ client.on("message", message => {
          .setThumbnail(message.author.avatarURL)
          .setDescription(`**
          ------------------------------
-         _bc1 : برودكاست لجميع اعضاء السيرفر بايمبد
-         _bc2 : برودكاست لجميع اعضاء السيرفر بدون ايمبد
-         _bc3 : برودكاست للاعضاء  الاونلاين فقط
+         $bc1 : برودكاست لجميع اعضاء السيرفر بايمبد
+         $bc2 : برودكاست لجميع اعضاء السيرفر بدون ايمبد
+         $bc3 : برودكاست للاعضاء  الاونلاين فقط
          ------------------------------
-         _id : عرض ملفك الشخصي
-         _ask : البوت يسئلك اسئلة
-         _server : احصائيات السيرفر
+         $id : عرض ملفك الشخصي
+         $ask : البوت يسئلك اسئلة
+         $server : احصائيات السيرفر
          ------------------------------
-         _ban : حظر العضو من السيرفر
-         _kick : طرد العضو من السيرفر
-         _clear : مسح الشات
-         _createroles : عمل رتب متكاملة للسيرفر
-         _voicesetup : انشاء روم فويس اونلاين
+         $ban : حظر العضو من السيرفر
+         $kick : طرد العضو من السيرفر
+         $clear : مسح الشات
+         $createroles : عمل رتب متكاملة للسيرفر
+         $voicesetup : انشاء روم فويس اونلاين
          لكتابة الكلام الذي في الروم اكتب _voicesetup الكلام و 0 
          ------------------------------
-         _guilds : عدد سيرفر البوت
-         _inv : دعوه البوت الى سيرفر
-         _help : عرض هذه الرسالة
+         $guilds : عدد سيرفر البوت
+         $inv : دعوه البوت الى سيرفر
+         $help : عرض هذه الرسالة
          ------------------------------
          
        **  `)
@@ -116,7 +116,7 @@ client.on('message', message => {
     }
 });
 client.on('message', message => {
-    var prefix = "_"
+    var prefix = "e"
 var args = message.content.split(" ").slice(1);    
 if(message.content.startsWith(prefix + 'id')) {
 var year = message.author.createdAt.getFullYear()
@@ -306,7 +306,7 @@ if (message.content.startsWith(prefix+"cv")) {
 });
 client.on('message', message => {
   if (true) {
-if (message.content === '_inv') {
+if (message.content === '$inv') {
       message.author.send('https://discordapp.com/api/oauth2/authorize?client_id=449359611036827663&permissions=8&scope=bot').catch(e => console.log(e.stack));
 
     }
@@ -315,7 +315,7 @@ if (message.content === '_inv') {
 
 
 client.on('message', message => {
-     if (message.content === "_inv") {
+     if (message.content === "$inv") {
      let embed = new Discord.RichEmbed()
   .setAuthor(message.author.username)
   .setColor("#9B59B6")
@@ -497,5 +497,83 @@ client.on("guildCreate", guild => {
   .setTimestamp()
   client.channels.get("476342429575020544").send(embed)
 });
+client.on('message', message => {
+ var prefix = "$"
+    if(message.content.startsWith(prefix + 'new')) {
+        let args = message.content.split(' ').slice(1).join(' ');
+        let support = message.guild.roles.find("name","Support Team");
+        let ticketsStation = message.guild.channels.find("name", "TICKETS");
+        if(!args) {
+            return message.channel.send('الرجاء كتابة سبب التذكرة');
+        };
+                if(!support) {
+                    return message.channel.send('**Please make sure that `Support Team` role exists and it\'s not duplicated.**');
+                };
+            if(!ticketsStation) {
+                message.guild.createChannel("Ticket", "category");
+            };
+                message.guild.createChannel(`𝑻𝑰𝑪𝑲𝑬𝑻`, "text").then(ticket => {
+                    message.delete()
+                        message.channel.send(`تم انشاء تذكرتك. [ ${ticket} ]`);
+                    ticket.setParent(ticketsStation);
+                    ticketsStation.setPosition(1);
+                        ticket.overwritePermissions(message.guild.id, {
+                            SEND_MESSAGES: false,
+                            READ_MESSAGES: false
+                        });
+                            ticket.overwritePermissions(support.id, {
+                                SEND_MESSAGES: true,
+                                READ_MESSAGES: true
+                            });
+                                ticket.overwritePermissions(message.author.id, {
+                                    SEND_MESSAGES: true,
+                                    READ_MESSAGES: true
+                                });
+                    let embed = new Discord.RichEmbed()
+                                .setTitle('**تذكرة جديدة.**')
+                                .setColor("RANDOM")
+                                .setThumbnail(`${message.author.avatarURL}`)
+                                .addField('سبب التذكرة', args)
+                                .addField('صاحب التذكرة', message.author)
+                                .addField('الروم', `<#${message.channel.id}>`);
 
-client.login('NTEzMDE5NTAxOTAyNTYxMjkw.DtG1eA.M2d1Eam2kT_ClAP5XyI8xxHTens');
+                                ticket.sendEmbed(embed);
+                }) .catch();
+    }
+    if(message.content.startsWith(prefix + 'close')) {
+            if(!message.member.hasPermission("ADMINISTRATOR")) return;
+        if(!message.channel.name.startsWith("𝑻𝑰𝑪𝑲𝑬𝑻")) {
+            return;
+        };  
+                let embed = new Discord.RichEmbed()
+                    .setAuthor("هل تريد فعلآ اغلاق التذكرة ؟.")
+                    .setColor("RANDOM");
+                    message.channel.sendEmbed(embed) .then(codes => {
+
+                    
+                        const filter = msg => msg.content.startsWith(prefix + 'close');
+                        message.channel.awaitMessages(response => response.content === prefix + 'close', {
+                            max: 1,
+                            time: 20000,
+                            errors: ['time']
+                        })
+                        .then((collect) => {
+                            message.channel.delete();
+                        }) .catch(() => {
+                            codes.delete()
+                                .then(message.channel.send('**Operation has been cancelled.**')) .then((c) => {
+                                    c.delete(4000);
+                                })
+                                    
+                            
+                        })
+
+
+                    })
+
+
+            
+    }
+});
+
+client.login(BOT_TOKEN);
