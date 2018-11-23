@@ -59,7 +59,7 @@ client.on('ready', () => {
 });
 client.on('ready', function(){
     var ms = 100000 ;
-    var setGame = [`$help `,`$inv`];
+    var setGame = [`$help `,`Energy System`];
     var i = -1;
     var j = 0;
     setInterval(function (){
@@ -97,10 +97,11 @@ client.on("message", message => {
          لكتابة الكلام الذي في الروم اكتب _voicesetup الكلام و 0 
          ------------------------------
          $guilds : عدد سيرفر البوت
-         $inv : دعوه البوت الى سيرفر
          $help : عرض هذه الرسالة
          ------------------------------
+         $new + reason : لفتح تذكره
          
+
        **  `)
    message.author.sendEmbed(embed)
    
